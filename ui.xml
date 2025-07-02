@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="ui\Layer.lua"/>
+    <Script file="ui\Padding.lua"/>
+    <Script file="ui\Textures.lua"/>
+    <Script file="ui\Alignment.lua"/>
+    <Script file="ui\Border.lua"/>
+    <Script file="ui\Modifier.lua"/>
+</Ui>

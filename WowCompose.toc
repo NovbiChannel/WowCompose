@@ -1,0 +1,12 @@
+## Interface: 30300
+## Title: WowCompose
+## Notes: Тестирование верстки UI компонентов
+## Author: Novbi
+## Version: 1.0
+
+ui.xml
+Component.lua
+layouts.xml
+text.xml
+button.xml
+Test.lua

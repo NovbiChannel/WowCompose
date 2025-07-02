@@ -1,0 +1,5 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+    <Script file="layouts\Box.lua"/>
+    <Script file="layouts\Row.lua"/>
+    <Script file="layouts\Column.lua"/>
+</Ui>
