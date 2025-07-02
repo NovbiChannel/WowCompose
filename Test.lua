@@ -25,14 +25,16 @@ local ui = Box(
             function(parent)
                 Box(
                     Modifier:new()
-                        :setWidth(70)
+                        :setWidth(100)
                         :setHeight(20)
                         :setBackground(Textures.DialogFrame, BorderSize.Medium)
                         :setAnchor(Alignment.Top),
                         function (_parent)
                             Text(
-                                "Сумка",
-                                Modifier:new():setAnchor(Alignment.Center)
+                                "Title",
+                                Modifier:new():setAnchor(Alignment.Center),
+                                nil,
+                                TextStyle.TOOLTIP_TEXT
                             )(_parent)
                         end
                 )(parent)
@@ -40,7 +42,7 @@ local ui = Box(
                 Column(
                     Modifier:new()
                         :setPaddingHorizontal(24)
-                        :setPaddingVertical(16)
+                        :setPaddingVertical(32)
                         :fillMaxSize(parent)
                         :setAnchor(Alignment.Center)
                     , 2 ,
