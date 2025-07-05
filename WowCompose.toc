@@ -9,4 +9,5 @@ Component.lua
 layouts.xml
 text.xml
 button.xml
+components.xml
 Test.lua

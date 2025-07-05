@@ -1,64 +1,68 @@
-SLASH_COMPOSE1 = "/compose"
+local playerLvl = {}
+local lvlLabel = {}
+local progressBar = {}
 
----@param text string
----@param parent UIParent
-local function UiButton(text, parent)
-    local btn = Button(
-        text,
-        Modifier:new()
-            :fillMaxWidth(parent),
-        nil,
-        function()
-            print("Click for "..text.." button")
-        end
-    )(parent)
+local expBar = Box(
+    Modifier:new()
+    :setPadding(0, 0, 0, 5)
+    :setWidth(325)
+    :setHeight(25)
+    :setAnchor(Alignment.Bottom),
+    function (parent)
+        playerLvl = Text(
+            tostring(UnitLevel("player")),
+            Modifier:new():setAnchor(Alignment.Start),
+            Layer.ARTWORK,
+            TextStyle.NORMAL_LARGE
+        )(parent)
 
-    return btn
-end
+        Text (
+            "         Уровень",
+            Modifier:new():setAnchor(Alignment.TopStart),
+            Layer.ARTWORK,
+            TextStyle.NORMAL
+        )(parent)
 
-local ui = Box(
+        lvlLabel = Text(
+            "0/0 0%",
+            Modifier:new():setAnchor(Alignment.TopEnd),
+            Layer.OVERLAY,
+            TextStyle.NORMAL
+        )(parent)
+
+        progressBar = ProgressBar(
             Modifier:new()
-                :setSize(200)
-                :setBackground(Textures.DialogFrame, BorderSize.Large)
-                :setMovable()
-                :setAnchor(Alignment.Center),
-            function(parent)
-                Box(
-                    Modifier:new()
-                        :setWidth(100)
-                        :setHeight(20)
-                        :setBackground(Textures.DialogFrame, BorderSize.Medium)
-                        :setAnchor(Alignment.Top),
-                        function (_parent)
-                            Text(
-                                "Title",
-                                Modifier:new():setAnchor(Alignment.Center),
-                                nil,
-                                TextStyle.TOOLTIP_TEXT
-                            )(_parent)
-                        end
-                )(parent)
+                :setWidth(300)
+                :setHeight(10)
+                :setBackground(Textures.Tooltip, BorderSize.Small)
+                :setAnchor(Alignment.BottomEnd)
+        )(parent)
 
-                Column(
-                    Modifier:new()
-                        :setPaddingHorizontal(24)
-                        :setPaddingVertical(32)
-                        :fillMaxSize(parent)
-                        :setAnchor(Alignment.Center)
-                    , 2 ,
-                    function (_parent)
-                        UiButton("Btn1", _parent)
-                        UiButton("Btn2", _parent)
-                        UiButton("Btn2", _parent)
-                    end
-                )(parent)
-            end
-        )(UIParent)
+        progressBar:SetStatusBarTexture("Interface\\TargetingFrame\\UI-StatusBar")
+        progressBar:SetStatusBarColor(0, 0.6, 1, 0.4)
+        progressBar:SetMinMaxValues(0, 1)
+    end
+)(UIParent)
 
-SlashCmdList["COMPOSE"] = function()
-    if ui:IsShown() then
-        ui:Hide()
-    else
-        ui:Show()
+local function UpdateExperience()
+    local currentXP = UnitXP("player")
+    local maxXP = UnitXPMax("player")
+    local percent = math.floor((currentXP / maxXP) * 100)
+
+    progressBar:SetValue(currentXP / maxXP)
+    playerLvl:SetText(tostring(UnitLevel("player")))
+    lvlLabel:SetText(""..currentXP.."/"..maxXP.." "..percent.."%")
+
+    local restedXP = GetXPExhaustion()
+    if restedXP then
+        progressBar:SetMinMaxValues(0, maxXP)
+        progressBar:SetValue(math.min(currentXP + restedXP, maxXP))
     end
 end
+
+expBar:RegisterEvent("PLAYER_XP_UPDATE")
+expBar:RegisterEvent("PLAYER_LEVEL_UP")
+expBar:RegisterEvent("UPDATE_EXHAUSTION")
+expBar:SetScript("OnEvent", UpdateExperience)
+
+UpdateExperience()

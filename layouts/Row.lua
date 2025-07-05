@@ -38,17 +38,7 @@ _G.Row = function(modifier, content)
                         prevChild = child
                     end
                 end
-                
-                -- Handle wrapContent
-                if modifier.wrapContent then
-                    frame:SetWidth(totalWidth + (modifier.padding.right or 0))
-                    frame:SetHeight(maxHeight + (modifier.padding.top or 0) + (modifier.padding.bottom or 0))
-                end
             end
-            
-            -- Set up update triggers
-            frame:SetScript("OnShow", updateLayout)
-            frame:SetScript("OnSizeChanged", updateLayout)
             
             -- Initial layout
             updateLayout()
